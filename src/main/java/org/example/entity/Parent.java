@@ -20,7 +20,7 @@ public class Parent {
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "userId")
-    private UserAccount userId;
+    private UserAccount user;
 
     private String name;
     private Integer age;

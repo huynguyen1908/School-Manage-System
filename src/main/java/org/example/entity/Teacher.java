@@ -16,7 +16,7 @@ public class Teacher {
     String teacherId;
     @OneToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")
-    private UserAccount userId;
+    private UserAccount user;
     private String name;
     private String subject;
     private boolean isHomeroom;

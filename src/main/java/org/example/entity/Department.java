@@ -14,7 +14,7 @@ public class Department {
 
     @OneToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")
-    private UserAccount userId;
+    private UserAccount user;
 
     private String departmentName;
     private String phoneNumber;
