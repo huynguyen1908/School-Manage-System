@@ -22,6 +22,7 @@ public class UserAccount {
 
     private boolean isActive = true;
     private LocalDateTime createAt = LocalDateTime.now();
+
     private String createdBy;
 
     @Column(nullable = false)
