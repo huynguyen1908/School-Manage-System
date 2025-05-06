@@ -1,21 +1,19 @@
 package org.example.service.impl;
 
+import org.example.dto.request.CreateAccountForDepartmentRequest;
 import org.example.dto.request.CreateAccountForParentRequest;
 import org.example.dto.request.CreateAccountForStudentRequest;
 import org.example.dto.request.CreateAccountForTeacherRequest;
-import org.example.entity.Parent;
-import org.example.entity.Student;
-import org.example.entity.Teacher;
-import org.example.entity.UserAccount;
+import org.example.entity.*;
 import org.example.enums.Role;
-import org.example.repository.ParentRepository;
-import org.example.repository.StudentRepository;
-import org.example.repository.TeacherRepository;
-import org.example.repository.UserAccountRepository;
+import org.example.repository.*;
 import org.example.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -30,6 +28,9 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Autowired
     TeacherRepository teacherRepository;
+
+    @Autowired
+    DepartmentRepository departmentRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -96,5 +97,40 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
 
         return account;
+    }
+
+    @Override
+    public UserAccount createAccountForDepartment(CreateAccountForDepartmentRequest request) {
+        if (userAccountRepository.existsByUsername(request.getUsername())) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        UserAccount account = new UserAccount();
+        account.setUsername(request.getUsername());
+        account.setPassword(passwordEncoder.encode(request.getPassword()));
+        account.setRole(request.getRole());
+        account = userAccountRepository.save(account);
+
+        if (request.getDepartmentId() == null || request.getDepartmentId().isBlank() ) {
+            Department department = new Department();
+            department.setDepartmentName(request.getRole().toString().toLowerCase());
+            department.setUser(account);
+            departmentRepository.save(department);
+        }
+
+        return account;
+    }
+
+    @Override
+    public void deleteAccount(String id){
+        UserAccount account = userAccountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        account.setActive(false);
+        userAccountRepository.save(account);
+    }
+
+    @Override
+    public List<UserAccount> getAllAccount(){
+        return userAccountRepository.findAll();
     }
 }
