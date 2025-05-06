@@ -26,13 +26,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
-//                        .requestMatchers("/user/**").hasRole("USER")
-//                        .requestMatchers("/api/login", "/api/register", "/api/logout").permitAll()
+                        .requestMatchers("/api/account/**", "/api/user/students/{studentId}/assign-parent/{parentId}").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().permitAll())
-//                .oauth2Login(oauth2 -> oauth2
-//                        .defaultSuccessUrl("/home", true) // Redirect after successful login
-//                        .failureUrl("/login?error=true"))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore((Filter) jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
