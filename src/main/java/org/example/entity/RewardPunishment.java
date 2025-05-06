@@ -30,10 +30,59 @@ public class RewardPunishment {
 
     private String content;
     private LocalDateTime sentAt;
+    
+    @Column(name = "effective_date")
+    private LocalDateTime effectiveDate;
+    
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+    
+    @Column(name = "notification_sent")
+    private boolean notificationSent;
+    
+    @Column(name = "parent_acknowledged")
+    private boolean parentAcknowledged;
+    
+    @Column(name = "parent_feedback", columnDefinition = "TEXT")
+    private String parentFeedback;
+    
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
     private RewardPunishmentStatus status;
 
     @Enumerated(EnumType.STRING)
     private RewardPunishmentType type;
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        if (sentAt == null) {
+            sentAt = LocalDateTime.now();
+        }
+    }
+    
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+    
+    // Method to mark notification as sent
+    public void markNotificationSent() {
+        this.notificationSent = true;
+    }
+    
+    // Method to acknowledge receipt by parent
+    public void acknowledgeByParent() {
+        this.parentAcknowledged = true;
+    }
+    
+    // Method to add feedback from parent
+    public void addParentFeedback(String feedback) {
+        this.parentFeedback = feedback;
+    }
 }
