@@ -4,7 +4,6 @@ import org.example.dto.respone.DepartmentDTO;
 import org.example.dto.respone.ParentDTO;
 import org.example.dto.respone.StudentDTO;
 import org.example.dto.respone.TeacherDTO;
-import org.example.entity.Student;
 
 import java.util.List;
 
