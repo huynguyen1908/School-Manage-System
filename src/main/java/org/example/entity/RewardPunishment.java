@@ -11,78 +11,33 @@ import java.time.LocalDateTime;
 @Table(name = "reward_punishment")
 @Data
 public class RewardPunishment {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "rp_id")
     private String rpId;
-
+    
     @ManyToOne
-    @JoinColumn(name = "decided_by_id", referencedColumnName = "departmentId")
-    private Department decidedBy;
-
-    @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "studentId")
+    @JoinColumn(name = "student_id")
     private Student student;
-
+    
     @ManyToOne
-    @JoinColumn(name = "teacher_id", referencedColumnName = "teacherId")
+    @JoinColumn(name = "teacher_id")
     private Teacher teacher;
-
+    
+    @ManyToOne
+    @JoinColumn(name = "decided_by_id")
+    private Department decidedBy;
+    
+    @Column(name = "content")
     private String content;
+    
+    @Column(name = "sent_at")
     private LocalDateTime sentAt;
     
-    @Column(name = "effective_date")
-    private LocalDateTime effectiveDate;
-    
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
-    
-    @Column(name = "notification_sent")
-    private boolean notificationSent;
-    
-    @Column(name = "parent_acknowledged")
-    private boolean parentAcknowledged;
-    
-    @Column(name = "parent_feedback", columnDefinition = "TEXT")
-    private String parentFeedback;
-    
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-    
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private RewardPunishmentStatus status;
-
+    
     @Enumerated(EnumType.STRING)
+    @Column(name = "type")
     private RewardPunishmentType type;
-    
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        if (sentAt == null) {
-            sentAt = LocalDateTime.now();
-        }
-    }
-    
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-    
-    // Method to mark notification as sent
-    public void markNotificationSent() {
-        this.notificationSent = true;
-    }
-    
-    // Method to acknowledge receipt by parent
-    public void acknowledgeByParent() {
-        this.parentAcknowledged = true;
-    }
-    
-    // Method to add feedback from parent
-    public void addParentFeedback(String feedback) {
-        this.parentFeedback = feedback;
-    }
 }

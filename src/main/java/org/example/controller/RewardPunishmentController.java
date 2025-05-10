@@ -1,9 +1,8 @@
 package org.example.controller;
 
-import org.example.dto.request.CreateRewardPunishmentRequest;
-import org.example.dto.request.UpdateRewardPunishmentRequest;
-import org.example.dto.request.ParentFeedbackRequest;
 import org.example.entity.RewardPunishment;
+import org.example.enums.RewardPunishmentStatus;
+import org.example.enums.RewardPunishmentType;
 import org.example.service.RewardPunishmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,73 +12,42 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/rewards-punishments")
+@RequestMapping("/api/reward-punishment")
 public class RewardPunishmentController {
     
-    @Autowired
-    private RewardPunishmentService rewardPunishmentService;
+    private final RewardPunishmentService service;
     
-    @PostMapping
-    public ResponseEntity<RewardPunishment> createRewardPunishment(@RequestBody CreateRewardPunishmentRequest request) {
-        RewardPunishment rewardPunishment = rewardPunishmentService.createRewardPunishment(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(rewardPunishment);
+    @Autowired
+    public RewardPunishmentController(RewardPunishmentService service) {
+        this.service = service;
     }
     
-    @GetMapping
-    public ResponseEntity<List<RewardPunishment>> getAllRewardPunishments(
-            @RequestParam(required = false) String studentId,
-            @RequestParam(required = false) String type,
-            @RequestParam(required = false) String status) {
-        List<RewardPunishment> rewards = rewardPunishmentService.getAllRewardPunishments(studentId, type, status);
-        return ResponseEntity.ok(rewards);
+    @PostMapping
+    public ResponseEntity<RewardPunishment> create(@RequestBody RewardPunishment rewardPunishment) {
+        return new ResponseEntity<>(service.create(rewardPunishment), HttpStatus.CREATED);
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<RewardPunishment> getRewardPunishmentById(@PathVariable String id) {
-        RewardPunishment reward = rewardPunishmentService.getRewardPunishmentById(id);
-        return ResponseEntity.ok(reward);
+    public ResponseEntity<RewardPunishment> getById(@PathVariable String id) {
+        return service.getById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
     
-    @PutMapping("/{id}")
-    public ResponseEntity<RewardPunishment> updateRewardPunishment(
+    @GetMapping("/type/{type}")
+    public ResponseEntity<List<RewardPunishment>> getByType(@PathVariable RewardPunishmentType type) {
+        return ResponseEntity.ok(service.getByType(type));
+    }
+    
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<RewardPunishment>> getByStatus(@PathVariable RewardPunishmentStatus status) {
+        return ResponseEntity.ok(service.getByStatus(status));
+    }
+    
+    @PutMapping("/{id}/status")
+    public ResponseEntity<RewardPunishment> updateStatus(
             @PathVariable String id, 
-            @RequestBody UpdateRewardPunishmentRequest request) {
-        RewardPunishment updatedReward = rewardPunishmentService.updateRewardPunishment(id, request);
-        return ResponseEntity.ok(updatedReward);
-    }
-    
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRewardPunishment(@PathVariable String id) {
-        rewardPunishmentService.deleteRewardPunishment(id);
-        return ResponseEntity.noContent().build();
-    }
-    
-    @PostMapping("/{id}/send-notification")
-    public ResponseEntity<RewardPunishment> sendNotification(@PathVariable String id) {
-        RewardPunishment reward = rewardPunishmentService.sendNotification(id);
-        return ResponseEntity.ok(reward);
-    }
-    
-    @PostMapping("/{id}/acknowledge")
-    public ResponseEntity<RewardPunishment> acknowledgeByParent(@PathVariable String id) {
-        RewardPunishment reward = rewardPunishmentService.acknowledgeByParent(id);
-        return ResponseEntity.ok(reward);
-    }
-    
-    @PostMapping("/{id}/feedback")
-    public ResponseEntity<RewardPunishment> addParentFeedback(
-            @PathVariable String id, 
-            @RequestBody ParentFeedbackRequest request) {
-        RewardPunishment reward = rewardPunishmentService.addParentFeedback(id, request.getFeedback());
-        return ResponseEntity.ok(reward);
-    }
-    
-    @GetMapping("/statistics")
-    public ResponseEntity<?> getStatistics(
-            @RequestParam(required = false) String studentId,
-            @RequestParam(required = false) String classId,
-            @RequestParam(required = false) String timeFrame) {
-        Object statistics = rewardPunishmentService.getStatistics(studentId, classId, timeFrame);
-        return ResponseEntity.ok(statistics);
+            @RequestParam RewardPunishmentStatus status) {
+        return ResponseEntity.ok(service.updateStatus(id, status));
     }
 }

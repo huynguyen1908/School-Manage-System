@@ -3,21 +3,30 @@ package org.example.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
-@Data
 @Table(name = "classes")
+@Data
 public class Classes {
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
+    @Column(name = "class_id")
     private String classId;
+    
+    @Column(name = "class_name")
     private String className;
+    
+    @Column(name = "grade")
     private Integer grade;
-
-    @ManyToOne
-    @JoinColumn(name = "assignment_id", referencedColumnName = "assignmentId")
-    private Assignment assignment;
-
+    
     @OneToOne
-    @JoinColumn(name = "homeroomTeacherId", referencedColumnName = "teacherId")
-    private Teacher homeroomTeacherId;
+    @JoinColumn(name = "homeroom_teacher_id")
+    private Teacher homeroomTeacher;
+    
+    @ManyToOne
+    @JoinColumn(name = "assignment_id")
+    private Assignment assignment;
+    
+    @OneToMany(mappedBy = "classes")
+    private List<Student> students;
 }

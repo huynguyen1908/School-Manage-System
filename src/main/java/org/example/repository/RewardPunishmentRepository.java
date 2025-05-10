@@ -1,6 +1,8 @@
 package org.example.repository;
 
 import org.example.entity.RewardPunishment;
+import org.example.entity.Student;
+import org.example.entity.Teacher;
 import org.example.enums.RewardPunishmentStatus;
 import org.example.enums.RewardPunishmentType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,13 +16,17 @@ import java.util.List;
 @Repository
 public interface RewardPunishmentRepository extends JpaRepository<RewardPunishment, String> {
 
-    List<RewardPunishment> findByStudentStudentId(String studentId);
+    List<RewardPunishment> findByStudent(Student student);
     
-    List<RewardPunishment> findByTypeAndStatus(RewardPunishmentType type, RewardPunishmentStatus status);
+    List<RewardPunishment> findByTeacher(Teacher teacher);
     
     List<RewardPunishment> findByType(RewardPunishmentType type);
     
     List<RewardPunishment> findByStatus(RewardPunishmentStatus status);
+    
+    List<RewardPunishment> findByStudentStudentId(String studentId);
+    
+    List<RewardPunishment> findByTypeAndStatus(RewardPunishmentType type, RewardPunishmentStatus status);
     
     long countByStudentStudentIdAndType(String studentId, RewardPunishmentType type);
     
@@ -28,8 +34,6 @@ public interface RewardPunishmentRepository extends JpaRepository<RewardPunishme
     long countByStudentClassroomClassIdAndType(
             @Param("classId") String classId, 
             @Param("type") RewardPunishmentType type);
-    
-    long countByType(RewardPunishmentType type);
     
     @Query("SELECT COUNT(rp) FROM RewardPunishment rp WHERE rp.student.studentId = :studentId AND rp.type = :type AND rp.sentAt > :date")
     long countByStudentStudentIdAndTypeAndSentAtAfter(
@@ -42,7 +46,6 @@ public interface RewardPunishmentRepository extends JpaRepository<RewardPunishme
             @Param("type") RewardPunishmentType type,
             @Param("date") LocalDateTime date);
     
-    // Add methods for more advanced statistics if needed
     @Query("SELECT COUNT(rp) FROM RewardPunishment rp WHERE rp.student.studentId = :studentId AND rp.sentAt BETWEEN :startDate AND :endDate")
     long countByStudentIdAndDateRange(
             @Param("studentId") String studentId,

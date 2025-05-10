@@ -12,7 +12,7 @@ public class ClassMapper {
                 entity.getClassName(),
                 entity.getGrade(),
                 entity.getAssignment() != null ? entity.getAssignment().getAssignmentId() : null,
-                entity.getHomeroomTeacherId() != null ? entity.getHomeroomTeacherId().getTeacherId() : null
+                entity.getHomeroomTeacher() != null ? entity.getHomeroomTeacher().getTeacherId() : null
         );
     }
 }

@@ -23,15 +23,18 @@ DROP TABLE IF EXISTS `assignment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `assignment` (
-  `due_dates` datetime(6) DEFAULT NULL,
   `assignment_id` varchar(255) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `teacher_id` varchar(255) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `due_dates` datetime(6) DEFAULT NULL,
+  `teacher_id` varchar(255) DEFAULT NULL,
+  `class_id` varchar(255) DEFAULT NULL,
   `subject` enum('Art','Chemistry','Civic_Education','English','Geography','History','Information_Technology','Literature','Math','Music','Physic','Physical_Education','Science') DEFAULT NULL,
   PRIMARY KEY (`assignment_id`),
   KEY `FK30dlo8n82vkt7657237hn67ko` (`teacher_id`),
-  CONSTRAINT `FK30dlo8n82vkt7657237hn67ko` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`)
+  KEY `FK_assignment_class` (`class_id`),
+  CONSTRAINT `FK30dlo8n82vkt7657237hn67ko` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`),
+  CONSTRAINT `FK_assignment_class` FOREIGN KEY (`class_id`) REFERENCES `classes` (`class_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -52,15 +55,13 @@ DROP TABLE IF EXISTS `classes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `classes` (
-  `grade` int DEFAULT NULL,
-  `assignment_id` varchar(255) DEFAULT NULL,
   `class_id` varchar(255) NOT NULL,
   `class_name` varchar(255) DEFAULT NULL,
+  `grade` int DEFAULT NULL,
   `homeroom_teacher_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`class_id`),
   UNIQUE KEY `UK3c0c1i937edtvk4o0k6slj44a` (`homeroom_teacher_id`),
-  KEY `FK3pvy7xuj4jifb3m9id3vkbdow` (`assignment_id`),
-  CONSTRAINT `FK3pvy7xuj4jifb3m9id3vkbdow` FOREIGN KEY (`assignment_id`) REFERENCES `assignment` (`assignment_id`),
+  KEY `FK7tee8ujdgrkg25sd19iy65qy2` (`homeroom_teacher_id`),
   CONSTRAINT `FK7tee8ujdgrkg25sd19iy65qy2` FOREIGN KEY (`homeroom_teacher_id`) REFERENCES `teacher` (`teacher_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
