@@ -54,4 +54,9 @@ public class UserController {
         return ResponseEntity.ok("Parent assigned to student successfully.");
     }
 
+    @GetMapping("/students")
+    public ResponseEntity<List<StudentDTO>> getStudentList(){
+        return ResponseEntity.ok(userService.getStudentList());
+    }
+
 }

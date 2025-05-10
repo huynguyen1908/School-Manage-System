@@ -1,8 +1,10 @@
 package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.dto.request.CreateClassRequest;
 import org.example.dto.respone.ClassDTO;
 import org.example.dto.respone.StudentDTO;
+import org.example.entity.Classes;
 import org.example.entity.Student;
 import org.example.mapper.ClassMapper;
 import org.example.mapper.StudentMapper;
@@ -36,5 +38,25 @@ public class ClassServiceImpl implements ClassService {
         return students.stream()
                 .map(StudentMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Classes createClass(CreateClassRequest request){
+        Classes classes = new Classes();
+        classes.setClassName(request.getClassName());
+        classes.setGrade(request.getGrade());
+        return classRepository.save(classes);
+    }
+
+    @Override
+    public void addStudentToClass(String classId, String studentId){
+        Classes classes = classRepository.findById(classId)
+                .orElseThrow(() -> new RuntimeException("Class not found"));
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        student.setClasses(classes);
+        studentRepository.save(student);
     }
 }

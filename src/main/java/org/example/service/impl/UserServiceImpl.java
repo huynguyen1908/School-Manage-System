@@ -90,4 +90,20 @@ public class UserServiceImpl implements UserService {
         studentRepository.save(student);
     }
 
+    @Override
+    public List<StudentDTO> getStudentList() {
+        List<Student> students = studentRepository.findAll();
+
+        return students.stream()
+                .map(student -> new StudentDTO(
+                        student.getStudentId(),
+                        student.getName(),
+                        student.getGender(),
+                        student.getDateOfBirth(),
+                        student.getClasses().getClassName(),
+                        student.getParent().getName()
+                ))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -20,4 +20,7 @@ public interface UserService {
 
     TeacherDTO getTeacherById(String id);
     void assignParentToStudent(String studentId, String parentId);
+
+    List<StudentDTO> getStudentList();
+
 }
