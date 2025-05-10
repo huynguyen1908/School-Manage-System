@@ -4,6 +4,7 @@ import org.example.dto.request.CreateAccountForDepartmentRequest;
 import org.example.dto.request.CreateAccountForParentRequest;
 import org.example.dto.request.CreateAccountForStudentRequest;
 import org.example.dto.request.CreateAccountForTeacherRequest;
+import org.example.dto.respone.UserAccountDTO;
 import org.example.entity.UserAccount;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface UserAccountService {
     UserAccount createAccountForDepartment(CreateAccountForDepartmentRequest request);
     void deleteAccount(String id);
     List<UserAccount> getAllAccount();
+
+    UserAccountDTO getAccountById(String id);
 }

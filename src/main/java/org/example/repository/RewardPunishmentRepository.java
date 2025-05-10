@@ -24,34 +24,34 @@ public interface RewardPunishmentRepository extends JpaRepository<RewardPunishme
     
     long countByStudentStudentIdAndType(String studentId, RewardPunishmentType type);
     
-    @Query("SELECT COUNT(rp) FROM RewardPunishment rp WHERE rp.student.classroom.classId = :classId AND rp.type = :type")
-    long countByStudentClassroomClassIdAndType(
-            @Param("classId") String classId, 
-            @Param("type") RewardPunishmentType type);
-    
-    long countByType(RewardPunishmentType type);
-    
-    @Query("SELECT COUNT(rp) FROM RewardPunishment rp WHERE rp.student.studentId = :studentId AND rp.type = :type AND rp.sentAt > :date")
-    long countByStudentStudentIdAndTypeAndSentAtAfter(
-            @Param("studentId") String studentId, 
-            @Param("type") RewardPunishmentType type,
-            @Param("date") LocalDateTime date);
-    
-    @Query("SELECT COUNT(rp) FROM RewardPunishment rp WHERE rp.type = :type AND rp.sentAt > :date")
-    long countByTypeAndSentAtAfter(
-            @Param("type") RewardPunishmentType type,
-            @Param("date") LocalDateTime date);
-    
-    // Add methods for more advanced statistics if needed
-    @Query("SELECT COUNT(rp) FROM RewardPunishment rp WHERE rp.student.studentId = :studentId AND rp.sentAt BETWEEN :startDate AND :endDate")
-    long countByStudentIdAndDateRange(
-            @Param("studentId") String studentId,
-            @Param("startDate") LocalDateTime startDate,
-            @Param("endDate") LocalDateTime endDate);
-    
-    @Query("SELECT COUNT(rp) FROM RewardPunishment rp WHERE rp.student.classroom.classId = :classId AND rp.type = :type AND rp.sentAt > :date")
-    long countByClassIdAndTypeAndSentAtAfter(
-            @Param("classId") String classId,
-            @Param("type") RewardPunishmentType type,
-            @Param("date") LocalDateTime date);
+//    @Query("SELECT COUNT(rp) FROM RewardPunishment rp WHERE rp.student.classroom.classId = :classId AND rp.type = :type")
+//    long countByStudentClassroomClassIdAndType(
+//            @Param("classId") String classId,
+//            @Param("type") RewardPunishmentType type);
+//
+//    long countByType(RewardPunishmentType type);
+//
+//    @Query("SELECT COUNT(rp) FROM RewardPunishment rp WHERE rp.student.studentId = :studentId AND rp.type = :type AND rp.sentAt > :date")
+//    long countByStudentStudentIdAndTypeAndSentAtAfter(
+//            @Param("studentId") String studentId,
+//            @Param("type") RewardPunishmentType type,
+//            @Param("date") LocalDateTime date);
+//
+//    @Query("SELECT COUNT(rp) FROM RewardPunishment rp WHERE rp.type = :type AND rp.sentAt > :date")
+//    long countByTypeAndSentAtAfter(
+//            @Param("type") RewardPunishmentType type,
+//            @Param("date") LocalDateTime date);
+//
+//    // Add methods for more advanced statistics if needed
+//    @Query("SELECT COUNT(rp) FROM RewardPunishment rp WHERE rp.student.studentId = :studentId AND rp.sentAt BETWEEN :startDate AND :endDate")
+//    long countByStudentIdAndDateRange(
+//            @Param("studentId") String studentId,
+//            @Param("startDate") LocalDateTime startDate,
+//            @Param("endDate") LocalDateTime endDate);
+//
+//    @Query("SELECT COUNT(rp) FROM RewardPunishment rp WHERE rp.student.classroom.classId = :classId AND rp.type = :type AND rp.sentAt > :date")
+//    long countByClassIdAndTypeAndSentAtAfter(
+//            @Param("classId") String classId,
+//            @Param("type") RewardPunishmentType type,
+//            @Param("date") LocalDateTime date);
 }
