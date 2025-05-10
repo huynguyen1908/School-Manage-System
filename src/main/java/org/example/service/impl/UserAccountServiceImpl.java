@@ -4,8 +4,10 @@ import org.example.dto.request.CreateAccountForDepartmentRequest;
 import org.example.dto.request.CreateAccountForParentRequest;
 import org.example.dto.request.CreateAccountForStudentRequest;
 import org.example.dto.request.CreateAccountForTeacherRequest;
+import org.example.dto.respone.UserAccountDTO;
 import org.example.entity.*;
 import org.example.enums.Role;
+import org.example.mapper.UserAccountMapper;
 import org.example.repository.*;
 import org.example.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,5 +134,11 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public List<UserAccount> getAllAccount(){
         return userAccountRepository.findAll();
+    }
+
+    @Override
+    public UserAccountDTO getAccountById(String id){
+        return userAccountRepository.findById(id)
+                .map(UserAccountMapper::toDTO).orElseThrow(()-> new RuntimeException("Không tìm thấy account"));
     }
 }

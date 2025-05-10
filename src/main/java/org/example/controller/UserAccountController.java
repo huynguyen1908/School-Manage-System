@@ -5,6 +5,7 @@ import org.example.dto.request.CreateAccountForDepartmentRequest;
 import org.example.dto.request.CreateAccountForParentRequest;
 import org.example.dto.request.CreateAccountForStudentRequest;
 import org.example.dto.request.CreateAccountForTeacherRequest;
+import org.example.dto.respone.UserAccountDTO;
 import org.example.entity.UserAccount;
 import org.example.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +55,10 @@ public class UserAccountController {
     @GetMapping("")
     public ResponseEntity<List<UserAccount>> getAllAccount(){
         return ResponseEntity.ok().body(userAccountService.getAllAccount());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserAccountDTO> getAccountById(@PathVariable String id){
+        return ResponseEntity.ok().body(userAccountService.getAccountById(id));
     }
 }
