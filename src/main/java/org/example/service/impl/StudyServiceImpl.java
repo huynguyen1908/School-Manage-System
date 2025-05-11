@@ -1,25 +1,21 @@
 package org.example.service.impl;
 
 import org.example.dto.request.AssignmentRequest;
+import org.example.dto.request.CreateAssignmentRequest;
 import org.example.dto.request.StudyScoreRequest;
 import org.example.dto.respone.AssignmentDTO;
 import org.example.dto.respone.StudyScoreDTO;
-import org.example.entity.Assignment;
-import org.example.entity.Student;
-import org.example.entity.StudyScore;
-import org.example.entity.Teacher;
+import org.example.entity.*;
 import org.example.enums.Subject;
 import org.example.mapper.AssignmentMapper;
 import org.example.mapper.StudyScoreMapper;
-import org.example.repository.AssignmentRepository;
-import org.example.repository.StudentRepository;
-import org.example.repository.StudyScoreRepository;
-import org.example.repository.TeacherRepository;
+import org.example.repository.*;
 import org.example.service.StudyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +38,9 @@ public class StudyServiceImpl implements StudyService {
 
     @Autowired
     private AssignmentMapper assignmentMapper;
+
+    @Autowired
+    private ClassesRepository classesRepository;
 
     @Override
     public List<StudyScoreDTO> getScoresByStudentId(String studentId) {
@@ -112,5 +111,59 @@ public class StudyServiceImpl implements StudyService {
                 .collect(Collectors.toList());
     }
 
+
+    @Override
+    public List<AssignmentDTO> getAssignmentsOfStudent(String studentId) {
+        List<Assignment> assignments = studentRepository.findAssignmentsByStudentId(studentId);
+        return assignments.stream()
+                .map(a -> new AssignmentDTO(
+                        a.getAssignmentId(),
+                        a.getSubject().toString(),
+                        a.getTitle(),
+                        a.getDueDates(),
+                        a.getDescription()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public AssignmentDTO createAssignment(CreateAssignmentRequest request) {
+        Classes classes = classesRepository.findById(request.getClassId())
+                .orElseThrow(() -> new RuntimeException("Class not found with ID: " + request.getClassId()));
+
+        Teacher teacher = teacherRepository.findById(request.getTeacherId())
+                .orElseThrow(() -> new RuntimeException("Teacher not found with ID: " + request.getTeacherId()));
+
+        Assignment assignment = new Assignment();
+        assignment.setClasses(classes);
+        assignment.setTeacher(teacher);
+        assignment.setSubject(Subject.valueOf(request.getSubject()));
+        assignment.setTitle(request.getTitle());
+        assignment.setDescription(request.getDescription());
+        assignment.setDueDates(request.getDueDates());
+
+        assignmentRepository.save(assignment);
+        return new AssignmentDTO(
+                assignment.getAssignmentId(),
+                assignment.getSubject().toString(),
+                assignment.getTitle(),
+                assignment.getDueDates(),
+                assignment.getDescription()
+        );
+    }
+
+    @Override
+    public AssignmentDTO getAssignmentById(String assignmentId) {
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new RuntimeException("Assignment not found with ID: " + assignmentId));
+
+        return new AssignmentDTO(
+                assignment.getAssignmentId(),
+                assignment.getSubject().toString(),
+                assignment.getTitle(),
+                assignment.getDueDates(),
+                assignment.getDescription()
+        );
+    }
 
 }

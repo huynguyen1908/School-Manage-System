@@ -23,9 +23,9 @@ public class Assignment {
     @JoinColumn(name = "teacher_id", referencedColumnName = "teacherId")
     private Teacher teacher;
 
-//    @OneToMany
-//    @JoinColumn(name = "class_id", referencedColumnName = "classId")
-//    private Classes classes;
+    @ManyToOne
+    @JoinColumn(name = "class_id")
+    private Classes classes;
 
     private String title;
     private LocalDateTime dueDates;
