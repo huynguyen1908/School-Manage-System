@@ -1,9 +1,6 @@
 package org.example.service;
 
-import org.example.dto.respone.DepartmentDTO;
-import org.example.dto.respone.ParentDTO;
-import org.example.dto.respone.StudentDTO;
-import org.example.dto.respone.TeacherDTO;
+import org.example.dto.respone.*;
 
 import java.util.List;
 
@@ -22,5 +19,8 @@ public interface UserService {
     void assignParentToStudent(String studentId, String parentId);
 
     List<StudentDTO> getStudentList();
+
+    List<TeacherDTO> getTeacherList();
+    List<AssignmentDTO> getAssignmentsByTeacherId(String teacherId);
 
 }

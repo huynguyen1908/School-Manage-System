@@ -1,18 +1,9 @@
 package org.example.service.impl;
 
-import org.example.dto.respone.DepartmentDTO;
-import org.example.dto.respone.ParentDTO;
-import org.example.dto.respone.StudentDTO;
-import org.example.dto.respone.TeacherDTO;
+import org.example.dto.respone.*;
 import org.example.entity.*;
-import org.example.mapper.DepartmentMapper;
-import org.example.mapper.ParentMapper;
-import org.example.mapper.StudentMapper;
-import org.example.mapper.TeacherMapper;
-import org.example.repository.DepartmentRepository;
-import org.example.repository.ParentRepository;
-import org.example.repository.StudentRepository;
-import org.example.repository.TeacherRepository;
+import org.example.mapper.*;
+import org.example.repository.*;
 import org.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +21,12 @@ public class UserServiceImpl implements UserService {
     private DepartmentRepository departmentRepository;
     @Autowired
     private ParentRepository parentRepository;
+
+    @Autowired
+    private AssignmentRepository assignmentRepository;
+
+    @Autowired
+    private AssignmentMapper assignmentMapper;
 
     @Override
     public StudentDTO getStudentById(String id) {
@@ -71,12 +68,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("Department not found"));
     }
 
-    @Override
-    public TeacherDTO getTeacherById(String id) {
-        return teacherRepository.findById(id)
-                .map(TeacherMapper::toDTO)
-                .orElseThrow(() -> new RuntimeException("Teacher not found"));
-    }
+
 
     @Override
     public void assignParentToStudent(String studentId, String parentId){
@@ -105,5 +97,29 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+
+    @Override
+    public List<TeacherDTO> getTeacherList() {
+        return teacherRepository.findAll()
+                .stream()
+                .map(TeacherMapper::toDTO) // ✔ GỌI THEO STATIC
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public TeacherDTO getTeacherById(String id) {
+        return teacherRepository.findById(id)
+                .map(TeacherMapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("Teacher not found"));
+    }
+
+
+    @Override
+    public List<AssignmentDTO> getAssignmentsByTeacherId(String teacherId) {
+        return assignmentRepository.findByTeacher_TeacherId(teacherId).stream()
+                .map(assignmentMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 
 }

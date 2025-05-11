@@ -1,9 +1,6 @@
 package org.example.controller;
 
-import org.example.dto.respone.DepartmentDTO;
-import org.example.dto.respone.ParentDTO;
-import org.example.dto.respone.StudentDTO;
-import org.example.dto.respone.TeacherDTO;
+import org.example.dto.respone.*;
 import org.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +14,7 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
 
     @GetMapping("/students/{id}")
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable String id) {
@@ -42,12 +40,6 @@ public class UserController {
     public ResponseEntity<DepartmentDTO> getDepartmentById(@PathVariable String id) {
         return ResponseEntity.ok(userService.getDepartmentById(id));
     }
-
-    @GetMapping("/teacher/{id}")
-    public ResponseEntity<TeacherDTO> getTeacherById(@PathVariable String id) {
-        return ResponseEntity.ok(userService.getTeacherById(id));
-    }
-
     @PutMapping("/students/{studentId}/assign-parent/{parentId}")
     public ResponseEntity<String> assignParentToStudent(@PathVariable String studentId, @PathVariable String parentId){
         userService.assignParentToStudent(studentId,parentId);
@@ -57,6 +49,19 @@ public class UserController {
     @GetMapping("/students")
     public ResponseEntity<List<StudentDTO>> getStudentList(){
         return ResponseEntity.ok(userService.getStudentList());
+    }
+
+    @GetMapping("/teachers/{id}")
+    public ResponseEntity<TeacherDTO> getTeacherById(@PathVariable String id) {
+        return ResponseEntity.ok(userService.getTeacherById(id));
+    }
+    @GetMapping("/teachers")
+    public List<TeacherDTO> getTeacherList() {
+        return userService.getTeacherList();
+    }
+    @GetMapping("/teachers/{id}/assignments")
+    public List<AssignmentDTO> getTeacherAssignments(@PathVariable String id) {
+        return userService.getAssignmentsByTeacherId(id);
     }
 
 }
