@@ -1,6 +1,10 @@
 package org.example.service;
 
+import org.example.dto.request.ParentUpdateRequest;
+import org.example.dto.request.StudentUpdateRequest;
+import org.example.dto.request.TeacherUpdateRequest;
 import org.example.dto.respone.*;
+import org.example.entity.UserAccount;
 
 import java.util.List;
 
@@ -16,11 +20,18 @@ public interface UserService {
     DepartmentDTO getDepartmentById(String id);
 
     TeacherDTO getTeacherById(String id);
+
     void assignParentToStudent(String studentId, String parentId);
 
     List<StudentDTO> getStudentList();
 
     List<TeacherDTO> getTeacherList();
-    List<AssignmentDTO> getAssignmentsByTeacherId(String teacherId);
 
+//    List<AssignmentDTO> getAssignmentsByTeacherId(String teacherId);
+
+    //    Object getStudentByUserId(UserAccount user);
+    StudentDTO getStudentByUserId(String userId);
+    TeacherDTO editTeacherDetail(String id, TeacherUpdateRequest request);
+    StudentDTO editStudentDetail(String id, StudentUpdateRequest request);
+    ParentDTO editParentDetail(String id, ParentUpdateRequest request);
 }

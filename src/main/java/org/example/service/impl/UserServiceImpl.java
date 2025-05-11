@@ -1,5 +1,8 @@
 package org.example.service.impl;
 
+import org.example.dto.request.ParentUpdateRequest;
+import org.example.dto.request.StudentUpdateRequest;
+import org.example.dto.request.TeacherUpdateRequest;
 import org.example.dto.respone.*;
 import org.example.entity.*;
 import org.example.mapper.*;
@@ -27,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AssignmentMapper assignmentMapper;
+
 
     @Override
     public StudentDTO getStudentById(String id) {
@@ -115,11 +119,87 @@ public class UserServiceImpl implements UserService {
     }
 
 
+//    @Override
+//    public List<AssignmentDTO> getAssignmentsByTeacherId(String teacherId) {
+//        return assignmentRepository.findByTeacher_TeacherId(teacherId).stream()
+//                .map(assignmentMapper::toDTO)
+//                .collect(Collectors.toList());
+//    }
+
+//    @Override
+//    public Object getStudentByUserId(UserAccount user) {
+//        switch (user.getRole().name()) {
+//            case "STUDENT":
+//                return studentRepository.findByUser(user)
+//                        .map(StudentMapper::toDTO)
+//                        .orElseThrow(()-> new RuntimeException("Student not found"));
+//            case "TEACHER":
+//                return teacherRepository.findByUser(user)
+//                        .map(TeacherMapper::toDTO)
+//                        .orElseThrow(()-> new RuntimeException("Teacher not found"));
+//            case "PARENT":
+//                return parentRepository.findByUser(user)
+//                        .map(ParentMapper::toDTO)
+//                        .orElseThrow(()-> new RuntimeException("Parent not found"));
+//            case "MANAGE":
+//                return departmentRepository.findByUser(user)
+//                        .map(DepartmentMapper::toDTO)
+//                        .orElseThrow(()-> new RuntimeException("Department not found"));
+//            default:
+//                return "Unknown";
+//        }
+//    }
+
     @Override
-    public List<AssignmentDTO> getAssignmentsByTeacherId(String teacherId) {
-        return assignmentRepository.findByTeacher_TeacherId(teacherId).stream()
-                .map(assignmentMapper::toDTO)
-                .collect(Collectors.toList());
+    public StudentDTO getStudentByUserId(String userId) {
+       return studentRepository.findByUser_UserId(userId)
+               .map(StudentMapper::toDTO)
+               .orElseThrow(() -> new RuntimeException("Student not found for userId: " + userId));
+
     }
+
+    @Override
+    public TeacherDTO editTeacherDetail(String id, TeacherUpdateRequest request){
+        Teacher teacher = teacherRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Teacher not found"));
+
+        teacher.setName(request.getName());
+        teacher.setHomeroom(request.isHomeroom());
+        teacher.setDateOfBirth(request.getDateOfBirth());
+        teacher.setGender(request.getGender());
+        teacher.setEmail(request.getEmail());
+        Teacher updatedTeacher = teacherRepository.save(teacher);
+
+        return TeacherMapper.toDTO(updatedTeacher);
+    }
+
+    @Override
+    public StudentDTO editStudentDetail(String id, StudentUpdateRequest request){
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        student.setName(request.getName());
+        student.setDateOfBirth(request.getDateOfBirth());
+        student.setGender(request.getGender());
+
+        Student updatedStudent = studentRepository.save(student);
+        return StudentMapper.toDTO(updatedStudent);
+    }
+
+    @Override
+    public ParentDTO editParentDetail(String id, ParentUpdateRequest request) {
+        Parent parent = parentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Parent not found"));
+
+        parent.setName(request.getName());
+        parent.setAge(request.getAge());
+        parent.setOccupation(request.getOccupation());
+        parent.setPhoneNumber(request.getPhoneNumber());
+        parent.setDateOfBirth(request.getDateOfBirth());
+
+        Parent updatedParent = parentRepository.save(parent);
+        return ParentMapper.toDTO(updatedParent);
+    }
+
 
 }
