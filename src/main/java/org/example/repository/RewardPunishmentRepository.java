@@ -13,4 +13,5 @@ import java.util.List;
 
 @Repository
 public interface RewardPunishmentRepository extends JpaRepository<RewardPunishment, String> {
+    List<RewardPunishment> findByType(RewardPunishmentType type);
 }
