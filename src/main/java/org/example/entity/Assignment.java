@@ -27,7 +27,6 @@ public class Assignment {
     @JoinColumn(name = "class_id")
     private Classes classes;
 
-
     private String title;
     private LocalDateTime dueDates;
     private String description;
