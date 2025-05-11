@@ -16,4 +16,5 @@ public interface StudyService {
     StudyScoreDTO updateScore(String scoreId, StudyScoreRequest request);
     List<AssignmentDTO> getAssignmentsOfTeacher(String teacherId);
 
+
 }
