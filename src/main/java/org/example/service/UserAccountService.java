@@ -18,4 +18,5 @@ public interface UserAccountService {
     List<UserAccount> getAllAccount();
 
     UserAccountDTO getAccountById(String id);
+    String getUserFullName(UserAccount user);
 }

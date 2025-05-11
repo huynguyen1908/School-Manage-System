@@ -4,8 +4,7 @@ import org.example.dto.respone.DepartmentDTO;
 import org.example.dto.respone.ParentDTO;
 import org.example.dto.respone.StudentDTO;
 import org.example.dto.respone.TeacherDTO;
-import org.example.entity.Parent;
-import org.example.entity.Student;
+import org.example.entity.*;
 import org.example.mapper.DepartmentMapper;
 import org.example.mapper.ParentMapper;
 import org.example.mapper.StudentMapper;
@@ -105,5 +104,6 @@ public class UserServiceImpl implements UserService {
                 ))
                 .collect(Collectors.toList());
     }
+
 
 }
