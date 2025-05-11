@@ -141,4 +141,28 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userAccountRepository.findById(id)
                 .map(UserAccountMapper::toDTO).orElseThrow(()-> new RuntimeException("Không tìm thấy account"));
     }
+
+    @Override
+    public String getUserFullName(UserAccount user) {
+        switch (user.getRole().name()) {
+            case "STUDENT":
+                return studentRepository.findByUser(user)
+                        .map(Student::getName)
+                        .orElse("Unknown Student");
+            case "TEACHER":
+                return teacherRepository.findByUser(user)
+                        .map(Teacher::getName)
+                        .orElse("Unknown Teacher");
+            case "PARENT":
+                return parentRepository.findByUser(user)
+                        .map(Parent::getName)
+                        .orElse("Unknown Parent");
+            case "DEPARTMENT":
+                return departmentRepository.findByUser(user)
+                        .map(Department::getDepartmentName)
+                        .orElse("Unknown Department");
+            default:
+                return "Unknown";
+        }
+    }
 }
