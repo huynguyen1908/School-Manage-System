@@ -31,5 +31,6 @@ public class RewardPunishment {
     private LocalDateTime sentAt;
     @Enumerated(EnumType.STRING)
     private RewardPunishmentStatus status;
-
+    @Enumerated(EnumType.STRING)
+    private  RewardPunishmentType type;
 }
