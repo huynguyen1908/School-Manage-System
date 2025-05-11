@@ -18,6 +18,5 @@ public interface StudentRepository extends JpaRepository<Student,String> {
     List<Student> findByParentId(@Param("parentId") String parentId);
     List<Student> findByClasses_ClassId(String classId);
     Optional<Student> findByUser(UserAccount userAccount);
-    //@Query("SELECT a FROM Assignment a JOIN a.teacher t JOIN t.students s WHERE s.studentId = :studentId")
-    //List<Assignment> findAssignmentsByStudentId(@Param("studentId") String studentId);
+    Optional<Student> findByUser_UserId(String userId);
 }
