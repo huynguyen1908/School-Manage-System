@@ -1,45 +1,45 @@
 package org.example.controller;
 
-import org.example.service.impl.MessageService;
-import org.springframework.stereotype.Controller;
+import org.example.dto.request.CreateMessageRequest;
+import org.example.dto.respone.MessageDTO;
+import org.example.service.MessageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("/api/messages")
 public class MessageController {
 
-    // Giả lập cơ sở dữ liệu trong bộ nhớ
-    private final List<MessageService> messages = new ArrayList<>();
-    private Long currentId = 1L;
+    @Autowired
+    private MessageService messageService;
 
-    // GET /message?sender_id=&receiver_id=
-    @GetMapping("/message")
-    public List<MessageService> getMessages(@RequestParam Long sender_id, @RequestParam Long receiver_id) {
-        return messages.stream()
-                .filter(msg -> msg.getSenderId().equals(sender_id) && msg.getReceiverId().equals(receiver_id))
-                .collect(Collectors.toList());
+    @GetMapping
+    public ResponseEntity<List<MessageDTO>> getMessages(
+            @RequestParam String senderId,
+            @RequestParam String receiverId) {
+        return ResponseEntity.ok(messageService.getMessages(senderId, receiverId));
     }
 
-    // POST /message
-    @PostMapping("/message")
-    public MessageService sendMessage(@RequestBody MessageService newMessage) {
-        newMessage.setId(currentId++);
-        newMessage.setTimestamp(LocalDateTime.now());
-        messages.add(newMessage);
-        return newMessage;
+    @PostMapping
+    public ResponseEntity<MessageDTO> createMessage(@RequestBody CreateMessageRequest request) {
+        MessageDTO created = messageService.createMessage(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    // GET /messages/thread/{user1_id}/{user2_id}
-    @GetMapping("/messages/thread/{user1_id}/{user2_id}")
-    public List<MessageService> getConversation(@PathVariable Long user1_id, @PathVariable Long user2_id) {
-        return messages.stream()
-                .filter(msg ->
-                        (msg.getSenderId().equals(user1_id) && msg.getReceiverId().equals(user2_id)) ||
-                                (msg.getSenderId().equals(user2_id) && msg.getReceiverId().equals(user1_id))
-                )
-                .sorted(Comparator.comparing(MessageService::getTimestamp))
-                .collect(Collectors.toList());
+    @GetMapping("/thread/{user1Id}/{user2Id}")
+    public ResponseEntity<List<MessageDTO>> getConversation(
+            @PathVariable String user1Id,
+            @PathVariable String user2Id) {
+        return ResponseEntity.ok(messageService.getConversation(user1Id, user2Id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteMessage(@PathVariable String id) {
+        messageService.deleteMessage(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Message deleted successfully");
     }
 }
