@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface StudyScoreRepository extends JpaRepository<StudyScore, String> {
     List<StudyScore> findByStudent_StudentId(String studentId);
+
 }

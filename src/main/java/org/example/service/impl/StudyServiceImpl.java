@@ -90,4 +90,27 @@ public class StudyServiceImpl implements StudyService {
 
         return assignmentMapper.toDTO(assignmentRepository.save(assignment));
     }
+
+    @Override
+    public StudyScoreDTO updateScore(String scoreId, StudyScoreRequest request) {
+        // 1. Lấy entity ra
+        StudyScore entity = scoreRepository.findById(scoreId)
+                .orElseThrow(() -> new RuntimeException("Score not found"));
+
+        // 2. Chỉ cập nhật trường score
+        entity.setScore(request.getScore());
+
+        // 3. Lưu và trả về DTO
+        StudyScore saved = scoreRepository.save(entity);
+        return scoreMapper.toDTO(saved);
+    }
+    @Override
+    public List<AssignmentDTO> getAssignmentsOfTeacher(String teacherId) {
+        List<Assignment> assignments = assignmentRepository.findByTeacherId(teacherId);
+        return assignments.stream()
+                .map(assignmentMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+
 }
