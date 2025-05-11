@@ -113,4 +113,18 @@ public class StudyServiceImpl implements StudyService {
     }
 
 
+    @Override
+    public List<AssignmentDTO> getAssignmentsOfStudent(String studentId) {
+        List<Assignment> assignments = studentRepository.findAssignmentsByStudentId(studentId);
+        return assignments.stream()
+                .map(a -> new AssignmentDTO(
+                        a.getAssignmentId(),
+                        a.getSubject().toString(),
+                        a.getTitle(),
+                        a.getDueDates(),
+                        a.getDescription()
+                ))
+                .collect(Collectors.toList());
+    }
+
 }
