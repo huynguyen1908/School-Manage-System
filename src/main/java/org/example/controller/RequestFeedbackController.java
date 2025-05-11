@@ -28,6 +28,10 @@ public class RequestFeedbackController {
         return ResponseEntity.ok(service.getRequestById(requestId));
     }
 
+    @PostMapping("/createRequest")
+    public ResponseEntity<RequestFeedback> createRequest(@RequestBody CreateRequestDTO dto) {
+        return ResponseEntity.ok(service.createRequest(dto));
+    }
 
     @PostMapping("/feedback")
     public ResponseEntity<RequestFeedback> sentFeedback(@RequestBody CreateFeedbackDTO dto) {
