@@ -1,5 +1,5 @@
 package org.example.enums;
 
 public enum RequestType {
-    APPEAL, PETITION
+    REQUEST, FEEDBACK, DONE, APPEAL, PETITION
 }
