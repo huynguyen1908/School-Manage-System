@@ -92,4 +92,10 @@ public class UserController {
         return ResponseEntity.ok(updated);
     }
 
+    @GetMapping("/by-teacher/{userId}")
+    public ResponseEntity<TeacherDTO> getTeacherByUserId(@PathVariable String userId) {
+        TeacherDTO teacherDTO = userService.getTeacherByUserId(userId);
+        return ResponseEntity.ok(teacherDTO);
+    }
+
 }
