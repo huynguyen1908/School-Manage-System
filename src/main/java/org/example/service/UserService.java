@@ -34,4 +34,6 @@ public interface UserService {
     TeacherDTO editTeacherDetail(String id, TeacherUpdateRequest request);
     StudentDTO editStudentDetail(String id, StudentUpdateRequest request);
     ParentDTO editParentDetail(String id, ParentUpdateRequest request);
+
+    TeacherDTO getTeacherByUserId(String userId);
 }

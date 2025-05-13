@@ -1,5 +1,6 @@
 package org.example.repository;
 
+import org.example.entity.Student;
 import org.example.entity.Teacher;
 import org.example.entity.UserAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,5 @@ import java.util.Optional;
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, String> {
     Optional<Teacher> findByUser(UserAccount userAccount);
+    Optional<Teacher> findByUser_UserId(String userId);
 }

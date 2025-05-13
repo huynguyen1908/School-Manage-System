@@ -201,5 +201,11 @@ public class UserServiceImpl implements UserService {
         return ParentMapper.toDTO(updatedParent);
     }
 
+    @Override
+    public TeacherDTO getTeacherByUserId(String userId) {
+        return teacherRepository.findByUser_UserId(userId)
+                .map(TeacherMapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("Teacher not found for userId: "));
 
+    }
 }
