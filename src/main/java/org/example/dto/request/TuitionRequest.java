@@ -1,6 +1,8 @@
 package org.example.dto.request;
 
 import lombok.Data;
+import org.example.enums.TuitionStatus;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -10,5 +12,5 @@ public class TuitionRequest {
     private String departmentId;  // ID khoa
     private LocalDate dueDate;  // Ngày hết hạn
     private BigDecimal amount;  // Số tiền học phí
-    private String status;  // Trạng thái (ví dụ: PAID, UNPAID)
+    private TuitionStatus status;  // Trạng thái (ví dụ: PAID, UNPAID)
 }
