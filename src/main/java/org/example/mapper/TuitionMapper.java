@@ -39,7 +39,11 @@ public class TuitionMapper {
         tuition.setDepartmentId(tuitionRequest.getDepartmentId());
         tuition.setAmount(tuitionRequest.getAmount());
         tuition.setDueDate(tuitionRequest.getDueDate());
-        tuition.setStatus(TuitionStatus.valueOf(tuitionRequest.getStatus()));
+        if (tuitionRequest.getStatus() != null) {
+            tuition.setStatus(tuitionRequest.getStatus());
+        } else {
+            tuition.setStatus(TuitionStatus.UNPAID);
+        }
         tuition.setParent(parent);  // Liên kết phụ huynh với thông báo học phí
 
         return tuition;
